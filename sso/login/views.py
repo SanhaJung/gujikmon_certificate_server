@@ -9,7 +9,7 @@ import requests
 def kakao_account(request):
     account_token = json.loads(request.body)
     access_token = account_token.get('access_token')
-    refresh_token = account_token.get('refresh_token')
+    # refresh_token = account_token.get('refresh_token')
     # post request
     # 유저 정보 가져오기
     profile_request = requests.post(
@@ -48,8 +48,8 @@ def kakao_account(request):
 @api_view(['POST'])
 def google_account(request):
     account_token = json.loads(request.body)
-    access_token = account_token.get('access_token')
-    refresh_token = account_token.get('refresh_token')
+    # access_token = account_token.get('access_token')
+    # refresh_token = account_token.get('refresh_token')
     id_token = access_token.get('id_token')
 
     url   = 'https://oauth2.googleapis.com/tokeninfo?id_token=' # 토큰을 이용해서 회원의 정보를 확인하기 위한 gogle api주소
