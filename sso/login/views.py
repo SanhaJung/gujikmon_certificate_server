@@ -84,3 +84,14 @@ def google_account(request):
         }
 
         return Response(json_list)
+
+
+
+    #회원 탈퇴
+    @api_view(['DELETE'])
+    def user_Withdrawal(request):
+        user_id = request.POST.get('user_pk')
+        user_delete = User.objects.get(id=user_id)
+        user_delete.delete()
+        return Response({'result':"success"})
+        
