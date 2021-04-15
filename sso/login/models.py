@@ -2,8 +2,7 @@ from djongo import models
 from django import forms
 # Create your models here.
 class Favorate(models.Model):
-    busiNo =models.CharField(max_length=250) #db에 저장된 기업 번호
-    coNm = models.CharField(max_length=250) #기업이름
+    coId =models.IntegerField() #db에 저장된 기업 번호
     class Meta:
         abstract=True
 
@@ -11,7 +10,7 @@ class FavorateFrom(forms.ModelForm):
     class Meta:
         model=Favorate
         fields=(
-            'busiNo','coNm'
+            'coId',
         )
 
 class User(models.Model):

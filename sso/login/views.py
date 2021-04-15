@@ -23,7 +23,6 @@ def kakao_account(request):
         # encoded_jwt        = jwt.encode({'id': user_info.id}, "secret", algorithm='HS256') # jwt토큰 발행
         json_list={
             'access_token' :access_token,
-            'refresh_token' : refresh_token,
             'user_email'    : user_info.email,
             'user_pk'      : user_info.id
         }
@@ -38,7 +37,6 @@ def kakao_account(request):
         new_user_info.save()
         json_list={
             'access_token' : access_token,
-            'refresh_token' : refresh_token,
             'user_email'    : new_user_info.email,
             'user_pk'      : new_user_info.id,
         }
@@ -63,8 +61,7 @@ def google_account(request):
         email =google_account.get('email',None)
         
         json_list={
-            'access_token'  : access_token,
-            'refresh_token' : refresh_token,
+            'id_token'  : id_token,
             'user_email'    : email,
             'user_pk'       : user_info.id
         }
@@ -81,8 +78,7 @@ def google_account(request):
         # encoded_jwt  = jwt.encode({'id': new_user_info.id}, "secret", algorithm='HS256') # jwt토큰 발행
         
         json_list={
-            'access_token' : access_token,
-            'refresh_token': refresh_token,
+            'id_token'     : id_token,
             'user_email'   : new_user_info.email,
             'user_pk'      : new_user_info.id
         }
