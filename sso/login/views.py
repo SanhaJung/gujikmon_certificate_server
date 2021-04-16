@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import User  
 import requests         
+import json
 
 
 #카카오 유저 저장 및 확인
@@ -9,8 +10,6 @@ import requests
 def kakao_account(request):
     account_token = json.loads(request.body)
     access_token = account_token.get('access_token')
-    # refresh_token = account_token.get('refresh_token')
-    # post request
     # 유저 정보 가져오기
     profile_request = requests.post(
         "https://kapi.kakao.com/v2/user/me",
@@ -45,10 +44,7 @@ def kakao_account(request):
 #구글 유저 저장 및 확인 
 @api_view(['POST'])
 def google_account(request):
-    account_token = json.loads(request.body)
-    # access_token = account_token.get('access_token')
-    # refresh_token = account_token.get('refresh_token')
-    id_token = access_token.get('id_token')
+    id_token =request.POST.get('id_token')
 
     url   = 'https://oauth2.googleapis.com/tokeninfo?id_token=' # 토큰을 이용해서 회원의 정보를 확인하기 위한 gogle api주소
     response = requests.get(url+id_token) #구글에 id_token을 보내 디코딩 요청
@@ -88,10 +84,10 @@ def google_account(request):
 
 
     #회원 탈퇴
-    @api_view(['DELETE'])
-    def user_Withdrawal(request):
-        user_id = request.POST.get('user_pk')
-        user_delete = User.objects.get(id=user_id)
-        user_delete.delete()
-        return Response({'result':"success"})
+@api_view(['DELETE'])
+def user_Withdrawal(request):
+    user_id = request.POST.get('user_pk')
+    user_delete = User.objects.get(id=user_id)
+    user_delete.delete()
+    return Response({'result':"success"})
         

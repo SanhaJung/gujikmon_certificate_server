@@ -41,22 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'login',
     'djongo',
-    # third party 
-    # django-rest-auth 
     'rest_framework',
-    # 'rest_framework.authtoken', 
-    # 'rest_auth', 
-
-    # django-allauth 
-    # 'django.contrib.sites',
-    # 'allauth', 
-    # 'allauth.account', 
-    # 'allauth.socialaccount', 
-    # 'rest_auth.registration', 
-
-     #privoider(여러 가지 sso 로그인 관리해주는 서비스-구글,네이버,카카오,페이스북,깃,...)
-    # 'allauth.socialaccount.providers.kakao',
-    # 'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
