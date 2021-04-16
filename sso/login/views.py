@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from .coSerializer import CoSerializer
 from .models import User  
 import requests         
 import json
@@ -18,12 +19,20 @@ def kakao_account(request):
     profile_json = profile_request.json()
 
     if User.objects.filter(social_login_id = profile_json['id']).exists(): #기존에 소셜로그인을 했었는지 확인
-        user_info          = User.objects.get(social_login_id=profile_json['id'])
-        # encoded_jwt        = jwt.encode({'id': user_info.id}, "secret", algorithm='HS256') # jwt토큰 발행
+        user_info = User.objects.get(social_login_id=profile_json['id'])
+        company_id = []
+        # 관심기업 목록 조회
+        for coId in user_info.cofavorate:
+            company_id.append(coId['coId'])
+
+        companies = Companies.objects.filter(id__in = company_id)
+        serializer=CoSerializer(companies,many=True)
+        cofavorites =make_json_list(companies,serializer)
         json_list={
             'access_token' :access_token,
             'user_email'    : user_info.email,
-            'user_pk'      : user_info.id
+            'user_pk'      : user_info.id,
+            'cofavorites'  : cofavorites
         }
         return Response(json_list)        
     else:
@@ -38,6 +47,7 @@ def kakao_account(request):
             'access_token' : access_token,
             'user_email'    : new_user_info.email,
             'user_pk'      : new_user_info.id,
+            'cofavorites'  :[]
         }
         return Response(json_list)  
 
@@ -55,11 +65,19 @@ def google_account(request):
         user_info = User.objects.get(social_login_id=google_account['sub'])
         # encoded_jwt = jwt.encode({'id': google_account["sub"]}, "secret", algorithm='HS256')
         email =google_account.get('email',None)
-        
+        company_id = []
+        # 관심기업 목록 조회
+        for coId in user_info.cofavorate:
+            company_id.append(coId['coId'])
+
+        companies = Companies.objects.filter(id__in = company_id)
+        serializer=CoSerializer(companies,many=True)
+        cofavorites = make_json_list(companies,serializer)
         json_list={
             'id_token'  : id_token,
             'user_email'    : email,
-            'user_pk'       : user_info.id
+            'user_pk'       : user_info.id,
+            'cofavorites'   : cofavorites
         }
 
         return Response(json_list)
@@ -76,7 +94,8 @@ def google_account(request):
         json_list={
             'id_token'     : id_token,
             'user_email'   : new_user_info.email,
-            'user_pk'      : new_user_info.id
+            'user_pk'      : new_user_info.id,
+            'cofavorites'  :[]
         }
 
         return Response(json_list)
@@ -91,3 +110,15 @@ def user_Withdrawal(request):
     user_delete.delete()
     return Response({'result':"success"})
         
+
+
+# json_list 만드는 작업
+def make_json_list(companies,serializer):
+    json_list =[]
+    for idx,co in enumerate(companies):
+        company={}
+        company['company']=serializer.data[idx]
+        company['sgBrandNm']=co.sgBrandNm
+        company['info']=co.info
+        json_list.append(company)
+    return json_list
