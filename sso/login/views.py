@@ -54,7 +54,8 @@ def kakao_account(request):
 #구글 유저 저장 및 확인 
 @api_view(['POST'])
 def google_account(request):
-    id_token =request.POST.get('id_token')
+    token = json.loads(request.body)
+    id_token= token.get('id_token')
 
     url   = 'https://oauth2.googleapis.com/tokeninfo?id_token=' # 토큰을 이용해서 회원의 정보를 확인하기 위한 gogle api주소
     response = requests.get(url+id_token) #구글에 id_token을 보내 디코딩 요청
@@ -105,7 +106,8 @@ def google_account(request):
     #회원 탈퇴
 @api_view(['DELETE'])
 def user_Withdrawal(request):
-    user_id = request.POST.get('user_pk')
+    id = json.loads(request.body)
+    user_id = id.get('user_pk')
     user_delete = User.objects.get(id=user_id)
     user_delete.delete()
     return Response({'result':"success"})
