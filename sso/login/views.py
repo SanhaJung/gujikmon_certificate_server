@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .coSerializer import CoSerializer
-from .models import User  
+from .models import User, Companies
 import requests         
 import json
 
@@ -104,7 +104,7 @@ def google_account(request):
 
 
     #회원 탈퇴
-@api_view(['DELETE'])
+@api_view(['POST'])
 def user_Withdrawal(request):
     id = json.loads(request.body)
     user_id = id.get('user_pk')
