@@ -106,7 +106,7 @@ ipython_config.py
 
 # poetry
 #poetry.lock
-
+ven/
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
 

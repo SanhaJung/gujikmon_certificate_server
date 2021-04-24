@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .coSerializer import CoSerializer
-from .models import User  
+from .models import User , Companies
 import requests         
 import json
 
@@ -54,7 +54,8 @@ def kakao_account(request):
 #구글 유저 저장 및 확인 
 @api_view(['POST'])
 def google_account(request):
-    id_token =request.POST.get('id_token')
+    token = json.loads(request.body)
+    id_token =token.get('id_token')
 
     url   = 'https://oauth2.googleapis.com/tokeninfo?id_token=' # 토큰을 이용해서 회원의 정보를 확인하기 위한 gogle api주소
     response = requests.get(url+id_token) #구글에 id_token을 보내 디코딩 요청
